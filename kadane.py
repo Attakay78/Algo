@@ -1,6 +1,6 @@
 # Kadane Algo Approach to solving for the maximum sum of a subarray (max sum of subarray with dynamic window)
 
-# First approach
+
 def max_sum_subarray(array):
     max_sum = float('-inf')
     current_sum = 0
@@ -13,21 +13,6 @@ def max_sum_subarray(array):
     
     return max_sum
 
-
-# Second approach
-def max_sum_arr(array):
-    max_sum = float('-inf')
-    current_sum = 0
-
-    for number in array:
-        if current_sum < 0:
-            current_sum = 0
-        
-        current_sum += number
-
-        max_sum = max(max_sum, current_sum)
-    
-    return max_sum
 
 
 # Find the left and right index of the max sum subarray of a given array
@@ -53,6 +38,6 @@ def find_index_of_max_sum(array):
 
 # Test
 arr = [1, -2, 3, 5, 2, -1, -2]
-arr2 = [5, -3, 5]
+arr2 = [-1, -3, -2]
 print(find_index_of_max_sum(arr2))
-print(max_sum_arr(arr2))
+print(max_sum_subarray(arr2))

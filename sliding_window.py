@@ -12,11 +12,15 @@ def sliding_window(array, k):
             # update the window by increasing window_start
             # window_start += 1
         ...
+# -----------------------------------------------------------
 
+
+# -----------------------------------------------------------
 
 # Given an array, return true if there are two elements within a 
 # window of size k that are equal
 
+# Answer 1: Optimized
 def close_duplicates(array, k):
     left_ptr = 0
     window = set()
@@ -33,10 +37,31 @@ def close_duplicates(array, k):
     
     return False
 
+# Answer 2
+def close_duplicates(array, k):
+    window_start = 0
+    sub_array = []
+
+    for window_end in range(len(array)):
+        sub_array.append(array[window_end])
+
+        if (window_end - window_start) == (k - 1):
+            for i in range(len(sub_array) - 1):
+                if sub_array[i] in sub_array[i+1:]:
+                    return True
+            
+            sub_array.pop(0)
+            window_start += 1
+    
+    return False
 
 arr = [1, 2, 4, 6, 2, 3]
 print(close_duplicates(arr, k=1))
+# ------------------------------------------------------
 
+
+
+# ------------------------------------------------------
 
 # Find the max sum of a subarray of window size k (max sum of subarray with fixed window)
 def max_sum(array, k):
@@ -59,28 +84,69 @@ def max_sum(array, k):
 arr = [1, -2, 3, -5, 2, -1, 2]
 print(max_sum(arr, 3))
 
+# -------------------------------------------------------
+
+
+
+# ------------------------------------------------------
 
 # Given  an array of positive integers nums and a positive integer target, return the
 # minimal length of a contiguous subarray of which the sum is greater than or equal to target.
 # If there is no such subarrray, return O instead.
 def minimal_length(nums, target):
-    min_len = 0
+    min_len = float('inf')
     current_sum = 0
     window_start = 0
 
     for window_end in range(len(nums)):
-
         current_sum += nums[window_end]
 
         while current_sum >= target:
             min_len = min(min_len, window_end - window_start + 1)
             current_sum -= nums[window_start]
             window_start += 1
-    
-    return min_len
 
+    return 0 if min_len == float('inf') else min_len
+
+
+arr = [1, 2, 4, 6, 7, 3, 4]
+print(minimal_length(arr, 7))
+
+
+# Same Question as above put return the minimal length and the subarray 
+# which makes up the minimal length, if no match return 0, []
+def minimal_length_with_subarray(nums, target):
+    min_len = float('inf')
+    current_sum = 0
+    window_start = 0
+    min_subarray = []
+
+    for window_end in range(len(nums)):
+        current_sum += nums[window_end]
+
+        while current_sum >= target:
+            # min_len = min(min_len, window_end - window_start + 1)
+            window_diff = window_end - window_start + 1
+            if window_diff < min_len:
+                min_len = window_diff
+                min_subarray = nums[window_start:window_end + 1]
+
+            current_sum -= nums[window_start]
+            window_start += 1
+
+    if min_len == float('inf'):
+        return 0, []
+    else:
+        return min_len, min_subarray
+
+# ----------------------------------------------------
+
+
+
+# ---------------------------------------------------
 
 # Return maximum number in a given sliding window k
+# Answer 1
 def maximum_numbers(nums, k):
     max_numbers = []
     window_start = 0
@@ -97,28 +163,28 @@ def maximum_numbers(nums, k):
     return max_numbers
 
 
-# Return maximum number in a given sliding window k (Optimized solution using monotonic decreasing)
+# Answer 2: Optimized solution using monotonic decreasing
 from collections import deque
 
-def max_numbers(nums, k):
-    mono_queue = deque()
-    left_ptr = 0
+def maximum_numbers(nums, k):
+    mono_queue = deque() #You can use a deque or a list(as stack)
+    window_start = 0
+    max_outputs = []
 
-    output_max = []
-
-    for right_ptr in range(len(nums)):
-        # pop smaller values from q
-        while mono_queue and nums[mono_queue[-1]] < nums[right_ptr]:
+    for window_end in range(len(nums)):
+        while mono_queue and (mono_queue[-1] < nums[window_end]):
             mono_queue.pop()
         
-        mono_queue.append(right_ptr)
+        mono_queue.append(nums[window_end])
 
-        # remove left val from window
-        if left_ptr > mono_queue[0]:
-            mono_queue.popleft()
-        
-        if (right_ptr + 1) >= k:
-            output_max.append(nums[mono_queue[0]])
-            left_ptr += 1
+        if (window_end - window_start) == (k - 1):
+            max_outputs.append(mono_queue[0])
+            window_start += 1
 
-    return output_max
+    return max_outputs
+
+
+arr = [1, 2, 4, 6, 2, 3]
+print(maximum_numbers(arr, k=1))
+# -------------------------------------------------------
+

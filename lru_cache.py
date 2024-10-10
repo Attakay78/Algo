@@ -66,6 +66,7 @@ class LRUCache:
         return -1
 
 
+from collections import OrderedDict
 
 # LRUCache using OrderedDict
 class LRUCache:
@@ -94,3 +95,16 @@ class LRUCache:
             self.items.popitem(last=True)
         
         return
+
+
+cache = LRUCache(5)
+
+for i in range(5):
+    cache.put(str(i), i)
+
+cache.get("4")
+cache.get("4")
+cache.put("3", 7)
+cache.put("1", 2)
+cache.put("6", 9)
+print(cache.items.items())
