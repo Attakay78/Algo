@@ -22,8 +22,8 @@ def is_anagram(first, second):
 
 
 
-s = "anagramj" 
-t = "nagaramk"
+s = "anggmamj" 
+t = "nagarmsk"
 
 res = is_anagram(s, t)
 print(res)
